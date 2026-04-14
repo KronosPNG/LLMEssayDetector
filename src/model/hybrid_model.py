@@ -13,18 +13,18 @@ def build_hybrid_model(
     dropout: float = 0.3,
 ) -> keras.Model:
 
-    # 🔹 Inputs
+    # Inputs
     emb_input   = keras.Input(shape=(embedding_dim,), name="embedding_input")
     stylo_input = keras.Input(shape=(n_features,), name="stylometric_input")
 
-    # 🔹 Stylometric branch
+    # Stylometric branch
     stylo_branch = build_stylometric_branch(n_features, stylo_out_dim)
     f = stylo_branch(stylo_input)   # [B, 128]
 
-    # 🔹 Fusion
+    # Fusion
     fused = layers.Concatenate(name="fusion")([emb_input, f])  # [B, 768 + 128]
 
-    # 🔹 Classifier
+    # Classifier
     x = layers.Dense(fc_units, activation="relu")(fused)
     x = layers.BatchNormalization()(x)
     x = layers.Dropout(dropout)(x)
