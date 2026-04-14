@@ -94,6 +94,8 @@ class FeatureConstructor:
         # Drop original text column if present and return
         if 'text' in features_df.columns:
             features_df = features_df.drop(columns=['text'])
+
+        features_df["label"] = df["label"].values
         
         return features_df
         
