@@ -1,0 +1,13 @@
+kagglehub
+keras
+tensorflow
+pandas
+numpy
+matplotlib
+scikit-learn
+seaborn 
+jupyterlab
+spacy
+spacy-syllables
+transformers
+torch
