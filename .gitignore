@@ -1,2 +1,5 @@
 *.csv
 *.pyc
+*/__pycache__/*
+
+input_data/*.txt

@@ -1,0 +1,30 @@
+Training run report
+===================
+
+Model name: trained_model
+Seed: 42
+Embeddings path: ../data/train_embeddings.csv
+Features path: ../data/train_features.csv
+Output dir: ../data/trained_model
+Train size: 26607
+Test size: 6652
+Class weight: {0: 1.0, 1: np.float64(3.5795180722891566)}
+Batch size: None
+Epochs: 10
+Validation split: None
+
+Final test metrics
+Test loss: 0.002501
+Test accuracy: 0.999549
+
+Per-epoch metrics
+Epoch 01: loss=0.278915 acc=0.893803 val_loss=0.013330 val_acc=0.998121
+Epoch 02: loss=0.048484 acc=0.989184 val_loss=0.006076 val_acc=0.999248
+Epoch 03: loss=0.027958 acc=0.994362 val_loss=0.002329 val_acc=0.999624
+Epoch 04: loss=0.020199 acc=0.995991 val_loss=0.001808 val_acc=0.999624
+Epoch 05: loss=0.015306 acc=0.996868 val_loss=0.001135 val_acc=1.000000
+Epoch 06: loss=0.013242 acc=0.997244 val_loss=0.001005 val_acc=0.999624
+Epoch 07: loss=0.011483 acc=0.997745 val_loss=0.000915 val_acc=1.000000
+Epoch 08: loss=0.008901 acc=0.997703 val_loss=0.000541 val_acc=0.999624
+Epoch 09: loss=0.007846 acc=0.998622 val_loss=0.000749 val_acc=0.999624
+Epoch 10: loss=0.005748 acc=0.998831 val_loss=0.000989 val_acc=0.999624

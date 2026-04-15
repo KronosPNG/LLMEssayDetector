@@ -192,7 +192,7 @@ class FeatureConstructor:
     
     def dash_frequency(self, text):
 
-        dash_count = sum(1 for token in text if token.text == "-")
+        dash_count = sum(1 for token in text if token.text == "-" or token.text == "—")
         total_tokens = len(text)
         
         if total_tokens == 0:
