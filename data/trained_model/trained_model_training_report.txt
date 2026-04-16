@@ -8,23 +8,34 @@ Features path: ../data/train_features.csv
 Output dir: ../data/trained_model
 Train size: 26607
 Test size: 6652
-Class weight: {0: 1.0, 1: np.float64(3.5795180722891566)}
-Batch size: None
+K-folds: 5
+Selection metric: val_accuracy
+Best fold: 1
+Best fold metric: 0.999436
+Batch size: 32
 Epochs: 10
-Validation split: None
 
 Final test metrics
-Test loss: 0.002501
-Test accuracy: 0.999549
+Test loss: 0.002152
+Test accuracy: 0.999248
 
 Per-epoch metrics
-Epoch 01: loss=0.278915 acc=0.893803 val_loss=0.013330 val_acc=0.998121
-Epoch 02: loss=0.048484 acc=0.989184 val_loss=0.006076 val_acc=0.999248
-Epoch 03: loss=0.027958 acc=0.994362 val_loss=0.002329 val_acc=0.999624
-Epoch 04: loss=0.020199 acc=0.995991 val_loss=0.001808 val_acc=0.999624
-Epoch 05: loss=0.015306 acc=0.996868 val_loss=0.001135 val_acc=1.000000
-Epoch 06: loss=0.013242 acc=0.997244 val_loss=0.001005 val_acc=0.999624
-Epoch 07: loss=0.011483 acc=0.997745 val_loss=0.000915 val_acc=1.000000
-Epoch 08: loss=0.008901 acc=0.997703 val_loss=0.000541 val_acc=0.999624
-Epoch 09: loss=0.007846 acc=0.998622 val_loss=0.000749 val_acc=0.999624
-Epoch 10: loss=0.005748 acc=0.998831 val_loss=0.000989 val_acc=0.999624
+
+Fold summaries
+Fold 1: metric=0.999436 class_weight={0: 1.0, 1: np.float64(3.5793889845094666)}
+Fold 2: metric=0.999248 class_weight={0: 1.0, 1: np.float64(3.5793889845094666)}
+Fold 3: metric=0.999436 class_weight={0: 1.0, 1: np.float64(3.57960413080895)}
+Fold 4: metric=0.999248 class_weight={0: 1.0, 1: np.float64(3.57960413080895)}
+Fold 5: metric=0.999060 class_weight={0: 1.0, 1: np.float64(3.57960413080895)}
+
+Per-epoch metrics (best fold)
+Epoch 01: loss=0.306942 acc=0.881795 val_loss=0.023613 val_acc=0.996994
+Epoch 02: loss=0.051147 acc=0.989100 val_loss=0.014236 val_acc=0.998497
+Epoch 03: loss=0.026973 acc=0.994456 val_loss=0.013531 val_acc=0.999061
+Epoch 04: loss=0.018539 acc=0.996288 val_loss=0.006203 val_acc=0.999436
+Epoch 05: loss=0.016718 acc=0.996288 val_loss=0.011061 val_acc=0.999061
+Epoch 06: loss=0.012404 acc=0.997557 val_loss=0.007059 val_acc=0.999436
+Epoch 07: loss=0.008544 acc=0.998309 val_loss=0.005436 val_acc=0.999436
+Epoch 08: loss=0.006852 acc=0.998403 val_loss=0.005927 val_acc=0.999436
+Epoch 09: loss=0.008016 acc=0.998121 val_loss=0.004927 val_acc=0.998497
+Epoch 10: loss=0.005805 acc=0.998638 val_loss=0.009882 val_acc=0.999436
