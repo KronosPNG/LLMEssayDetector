@@ -7,6 +7,7 @@ from tensorflow import keras
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
 from model.hybrid_model import build_hybrid_model
 
@@ -81,9 +82,10 @@ print("Data loaded successfully. Building model...")
 
 #  build
 model = build_hybrid_model(
-    n_features = 42,
-    embedding_dim = 768,
-    dropout= 0.4
+    stylo_dropout=0.3,
+    stylo_activation="relu",
+    dropout= 0.4,
+    activation_function="sigmoid"
 )
 
 print("Model built successfully. Starting training...")
@@ -130,9 +132,13 @@ history = model.fit(
 test_loss, test_acc = model.evaluate([X_emb_test, X_stylo_test], y_test, verbose=0)
 print(f"Test loss: {test_loss:.4f} | Test accuracy: {test_acc:.4f}")
 
-plt.figure(figsize=(10, 4))
+test_probs = model.predict([X_emb_test, X_stylo_test], verbose=0).ravel()
+test_preds = (test_probs >= 0.5).astype(int)
+conf_matrix = confusion_matrix(y_test, test_preds)
 
-plt.subplot(1, 2, 1)
+plt.figure(figsize=(14, 4))
+
+plt.subplot(1, 3, 1)
 plt.plot(history.history["accuracy"], label="train")
 plt.plot(history.history["val_accuracy"], label="val")
 plt.title("Accuracy")
@@ -140,13 +146,24 @@ plt.xlabel("Epoch")
 plt.ylabel("Accuracy")
 plt.legend()
 
-plt.subplot(1, 2, 2)
+plt.subplot(1, 3, 2)
 plt.plot(history.history["loss"], label="train")
 plt.plot(history.history["val_loss"], label="val")
 plt.title("Loss")
 plt.xlabel("Epoch")
 plt.ylabel("Loss")
 plt.legend()
+
+plt.subplot(1, 3, 3)
+ConfusionMatrixDisplay(conf_matrix).plot(
+    ax=plt.gca(),
+    cmap="Blues",
+    colorbar=False,
+    values_format="d",
+)
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
 
 plt.tight_layout()
 os.makedirs(args.output_dir, exist_ok=True)
