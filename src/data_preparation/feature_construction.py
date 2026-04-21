@@ -11,6 +11,10 @@ class FeatureConstructor:
         "NOUN", "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ",
         "SYM", "VERB", "X", "SPACE"
     ]
+
+    TOTAL_TOKENS = 0
+    TOTAL_SENTENCES = 0
+    SENTENCES = []
     
     def __init__(self):
         self.__nlp = spacy.load("en_core_web_sm")
@@ -21,7 +25,7 @@ class FeatureConstructor:
         self.__excess_words_df = pd.read_csv(url).drop(columns=["type", "part_of_speech", "comment"])
 
 
-    def construct_features(self, df):
+    def construct_features(self, df, keep_columns=["label"]):
         feature_data = {
             "sentence_count": [],
             "avg_word_per_sentence": [],
@@ -46,7 +50,10 @@ class FeatureConstructor:
             "future_tense_ratio": [],
             "passive_voice_ratio": [],
             "excess_word_ratio": [],
-
+            # "sentence_length_standard_deviation": [],
+            # "sentence_length_variance": [],
+            # "burstiness": [],
+            # "sentence_opening_diversity": []
         }
         
         # Add POS tag columns
@@ -55,6 +62,10 @@ class FeatureConstructor:
         
         for row in tqdm(df["text"], desc="Constructing features"):
             text = self.__nlp(row)
+
+            self.TOTAL_TOKENS = len(text)
+            self.SENTENCES = list(text.sents)
+            self.TOTAL_SENTENCES = len(self.SENTENCES)
 
             feature_data["sentence_count"].append(self.sentence_count(text))
             feature_data["avg_word_per_sentence"].append(self.avg_word_per_sentence(text))
@@ -83,6 +94,11 @@ class FeatureConstructor:
             
             feature_data["passive_voice_ratio"].append(self.passive_voice_ratio(text))
             feature_data["excess_word_ratio"].append(self.excess_word_ratio(text))
+
+            # feature_data["sentence_length_standard_deviation"].append(self.sentence_length_standard_deviation())
+            # feature_data["sentence_length_variance"].append(self.sentence_length_variance())
+            # feature_data["burstiness"].append(self.burstiness())
+            # feature_data["sentence_opening_diversity"].append(self.sentence_opening_diversity())
             
             # POS_tag_distribution returns a dictionary
             pos_distribution = self.POS_tag_distribution(text)
@@ -95,25 +111,27 @@ class FeatureConstructor:
         if 'text' in features_df.columns:
             features_df = features_df.drop(columns=['text'])
 
-        features_df["label"] = df["label"].values
+        for col in keep_columns:
+            if col in df.columns:
+                features_df[col] = df[col].values
         
         return features_df
         
     
     def sentence_count(self, text):
-
-        sentences = list(text.sents)
-        return len(sentences)
+        return self.TOTAL_SENTENCES
+    
     
     def avg_word_per_sentence(self, text):
 
-        num_sentences = len(list(text.sents))
-        num_words = len(text)
+        num_sentences = self.TOTAL_SENTENCES
+        num_words = self.TOTAL_TOKENS
         
         if num_sentences == 0:
             return 0
         
         return num_words / num_sentences
+    
     
     def avg_word_length(self, text):
 
@@ -125,86 +143,87 @@ class FeatureConstructor:
         total_length = sum(len(word) for word in words)
         return total_length / len(words)
     
+    
     def paragraph_count(self, text):
 
         paragraphs = text.text.split("\n\n")
         return len(paragraphs)
     
+    
     def avg_sentence_length(self, text):
 
-        sentences = list(text.sents)
-        
-        if len(sentences) == 0:
+        if self.TOTAL_SENTENCES == 0:
             return 0
         
-        total_length = sum(len(sentence) for sentence in sentences)
-        return total_length / len(sentences)
-    
+        total_length = sum(len(sentence) for sentence in self.SENTENCES)
+        return total_length / self.TOTAL_SENTENCES
+
+
     def POS_tag_distribution(self, text):        
 
         pos_counts = Counter(token.pos_ for token in text)
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return {pos: 0 for pos in self.POS_LIST}
         
-        return {pos: count / total_tokens for pos, count in pos_counts.items()}
+        return {pos: count / self.TOTAL_TOKENS for pos, count in pos_counts.items()}
+
 
     def comma_frequency(self, text):
 
         comma_count = sum(1 for token in text if token.text == ",")
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return comma_count / total_tokens
+        return comma_count / self.TOTAL_TOKENS
+    
     
     def semicolon_frequency(self, text):
 
         semicolon_count = sum(1 for token in text if token.text == ";")
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return semicolon_count / total_tokens
+        return semicolon_count / self.TOTAL_TOKENS
+    
     
     def question_mark_frequency(self, text):
 
         question_mark_count = sum(1 for token in text if token.text == "?")
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return question_mark_count / total_tokens
+        return question_mark_count / self.TOTAL_TOKENS
+    
         
     def exclamation_mark_frequency(self, text):
 
         exclamation_mark_count = sum(1 for token in text if token.text == "!")
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return exclamation_mark_count / total_tokens
+        return exclamation_mark_count / self.TOTAL_TOKENS
+    
     
     def dash_frequency(self, text):
 
         dash_count = sum(1 for token in text if token.text == "-" or token.text == "—")
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return dash_count / total_tokens
+        return dash_count / self.TOTAL_TOKENS
+    
     
     def reading_ease_score(self, text):
         # Flesch reading ease score
         
-        num_sentences = len(list(text.sents))
-        num_words = len(text)
+        num_sentences = self.TOTAL_SENTENCES
+        num_words = self.TOTAL_TOKENS
         num_syllables = sum(token._.syllables_count for token in text if token.is_alpha)
         
         if num_sentences == 0 or num_words == 0:
@@ -212,11 +231,12 @@ class FeatureConstructor:
         
         return 206.835 - 1.015 * (num_words / num_sentences) - 84.6 * (num_syllables / num_words)
     
+
     def flesch_kincaid_grade(self, text):
         # Flesch-Kincaid grade level
 
-        num_sentences = len(list(text.sents))
-        num_words = len(text)
+        num_sentences = self.TOTAL_SENTENCES
+        num_words = self.TOTAL_TOKENS
         num_syllables = sum(token._.syllables_count for token in text if token.is_alpha)
         
         if num_sentences == 0 or num_words == 0:
@@ -224,55 +244,56 @@ class FeatureConstructor:
         
         return 0.39 * (num_words / num_sentences) + 11.8 * (num_syllables / num_words) - 15.59
     
+
     def uppercase_word_ratio(self, text):
 
         uppercase_count = sum(1 for token in text if token.is_upper)
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return uppercase_count / total_tokens
+        return uppercase_count / self.TOTAL_TOKENS
+    
     
     def title_case_word_ratio(self, text):
 
         title_case_count = sum(1 for token in text if token.is_title)
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return title_case_count / total_tokens
+        return title_case_count / self.TOTAL_TOKENS
+    
     
     def stop_word_ratio(self, text):
 
         stop_word_count = sum(1 for token in text if token.is_stop)
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return stop_word_count / total_tokens
+        return stop_word_count / self.TOTAL_TOKENS
+    
     
     def named_entity_ratio(self, text):
 
         named_entity_count = len(text.ents)
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return named_entity_count / total_tokens
+        return named_entity_count / self.TOTAL_TOKENS
+    
     
     def lexical_diversity(self, text):
 
         unique_words = set(token.text for token in text if token.is_alpha)
-        total_tokens = len(text)
         
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
-        return len(unique_words) / total_tokens
+        return len(unique_words) / self.TOTAL_TOKENS
+    
     
     def word_repetition_ratio(self, text):
 
@@ -283,13 +304,12 @@ class FeatureConstructor:
                 word = token.text.lower()
                 word_counts[word] = word_counts.get(word, 0) + 1
         
-        total_tokens = len(text)
-        
-        if total_tokens == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
         repetition_count = sum(count for count in word_counts.values() if count > 1)
-        return repetition_count / total_tokens
+        return repetition_count / self.TOTAL_TOKENS
+    
     
     def verb_tense_ratio(self, text):
 
@@ -303,15 +323,16 @@ class FeatureConstructor:
         
         return past_tense_count / total_verbs, present_tense_count / total_verbs, future_tense_count / total_verbs
     
+
     def passive_voice_ratio(self, text):
 
         passive_count = sum(1 for token in text if token.dep_ == "auxpass")
-        total_sentences = len(list(text.sents))
-        
-        if total_sentences == 0:
+
+        if self.TOTAL_SENTENCES == 0:
             return 0
         
-        return passive_count / total_sentences
+        return passive_count / self.TOTAL_SENTENCES
+    
     
     def excess_word_ratio(self, text):
         """
@@ -322,10 +343,58 @@ class FeatureConstructor:
         """
 
         words = [token.text.lower() for token in text if token.is_alpha]
-        total_words = len(words)
         
-        if total_words == 0:
+        if self.TOTAL_TOKENS == 0:
             return 0
         
         excess_word_count = sum(1 for word in words if word in self.__excess_words_df["word"].values)
-        return excess_word_count / total_words
+        return excess_word_count / self.TOTAL_TOKENS
+    
+    
+    def sentence_length_standard_deviation(self):
+
+        sentence_lengths = [len(sentence) for sentence in self.SENTENCES]
+        
+        if len(sentence_lengths) == 0:
+            return 0
+        
+        return np.std(sentence_lengths)
+    
+
+    def sentence_length_variance(self):
+
+        sentence_lengths = [len(sentence) for sentence in self.SENTENCES]
+        
+        if len(sentence_lengths) < 2:
+            return 0
+        
+        return np.var(sentence_lengths)
+    
+
+    def burstiness(self):
+        """
+            Reference: Goh & Barabasi (2008), Burstiness and memory in complex systems.
+        """
+        sentence_lengths = [len(sentence) for sentence in self.SENTENCES]
+        
+        if len(sentence_lengths) < 2:
+            return 0
+        
+        mu = np.mean(sentence_lengths)
+        sigma = np.std(sentence_lengths)
+        
+        return (sigma - mu) / (sigma + mu) if (sigma + mu) > 0 else 0
+    
+
+    def sentence_opening_diversity(self):
+        """
+            Measures the diversity of sentence openings by calculating the ratio of unique first words of sentences
+            to the total number of sentences. A higher ratio indicates more varied sentence structures.
+        """
+        if self.TOTAL_SENTENCES == 0:
+            return 0
+        
+        first_words = [sentence[0].text.lower() for sentence in self.SENTENCES if len(sentence) > 0]
+        unique_first_words = set(first_words)
+        
+        return len(unique_first_words) / self.TOTAL_SENTENCES
