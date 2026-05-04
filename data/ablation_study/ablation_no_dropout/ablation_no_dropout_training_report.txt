@@ -1,0 +1,20 @@
+Training run report
+===================
+
+Model name: ablation_no_dropout
+
+Final dataset metrics
+Dataset loss: 0.005683
+Dataset accuracy: 0.999639
+
+Per-epoch metrics
+Epoch 01: loss=0.070820 acc=0.988965
+Epoch 02: loss=0.008107 acc=0.998677
+Epoch 03: loss=0.002716 acc=0.999759
+Epoch 04: loss=0.001258 acc=0.999940
+Epoch 05: loss=0.000470 acc=1.000000
+Epoch 06: loss=0.000202 acc=1.000000
+Epoch 07: loss=0.000097 acc=1.000000
+Epoch 08: loss=0.000052 acc=1.000000
+Epoch 09: loss=0.000028 acc=1.000000
+Epoch 10: loss=0.000016 acc=1.000000

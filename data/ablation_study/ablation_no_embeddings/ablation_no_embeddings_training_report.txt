@@ -1,0 +1,20 @@
+Training run report
+===================
+
+Model name: ablation_no_embeddings
+
+Final dataset metrics
+Dataset loss: 0.263844
+Dataset accuracy: 0.882077
+
+Per-epoch metrics
+Epoch 01: loss=0.798091 acc=0.738507
+Epoch 02: loss=0.575508 acc=0.839953
+Epoch 03: loss=0.521930 acc=0.854626
+Epoch 04: loss=0.476886 acc=0.866502
+Epoch 05: loss=0.397407 acc=0.892480
+Epoch 06: loss=0.345489 acc=0.910611
+Epoch 07: loss=0.318823 acc=0.916744
+Epoch 08: loss=0.298511 acc=0.924862
+Epoch 09: loss=0.282955 acc=0.928621
+Epoch 10: loss=0.276108 acc=0.933822

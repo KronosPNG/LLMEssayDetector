@@ -1,0 +1,20 @@
+Training run report
+===================
+
+Model name: ablation_shallow_classifier
+
+Final dataset metrics
+Dataset loss: 0.000424
+Dataset accuracy: 0.999940
+
+Per-epoch metrics
+Epoch 01: loss=0.140835 acc=0.957936
+Epoch 02: loss=0.032985 acc=0.994047
+Epoch 03: loss=0.019248 acc=0.996242
+Epoch 04: loss=0.012455 acc=0.997775
+Epoch 05: loss=0.008992 acc=0.998467
+Epoch 06: loss=0.007547 acc=0.998587
+Epoch 07: loss=0.006414 acc=0.998707
+Epoch 08: loss=0.005455 acc=0.998888
+Epoch 09: loss=0.004154 acc=0.999369
+Epoch 10: loss=0.003979 acc=0.999188

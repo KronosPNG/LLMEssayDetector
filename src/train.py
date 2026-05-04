@@ -28,13 +28,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--embeddings-path",
         type=str,
-        default="../data/train_embeddings.csv",
+        default="../data/processed_datasets/train_embeddings.csv",
         help="Path to embeddings CSV.",
     )
     parser.add_argument(
         "--features-path",
         type=str,
-        default="../data/train_features.csv",
+        default="../data/processed_datasets/train_features.csv",
         help="Path to stylometric features CSV.",
     )
     parser.add_argument(

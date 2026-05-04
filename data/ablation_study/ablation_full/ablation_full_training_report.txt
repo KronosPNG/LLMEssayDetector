@@ -1,0 +1,20 @@
+Training run report
+===================
+
+Model name: ablation_full
+
+Final dataset metrics
+Dataset loss: 0.000374
+Dataset accuracy: 0.999850
+
+Per-epoch metrics
+Epoch 01: loss=0.212491 acc=0.921916
+Epoch 02: loss=0.032411 acc=0.992543
+Epoch 03: loss=0.020711 acc=0.995640
+Epoch 04: loss=0.012780 acc=0.996993
+Epoch 05: loss=0.009826 acc=0.997955
+Epoch 06: loss=0.008427 acc=0.998376
+Epoch 07: loss=0.008632 acc=0.997925
+Epoch 08: loss=0.007175 acc=0.998316
+Epoch 09: loss=0.005960 acc=0.998497
+Epoch 10: loss=0.004641 acc=0.998888

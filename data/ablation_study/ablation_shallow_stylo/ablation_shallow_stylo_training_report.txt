@@ -1,0 +1,20 @@
+Training run report
+===================
+
+Model name: ablation_shallow_stylo
+
+Final dataset metrics
+Dataset loss: 0.000509
+Dataset accuracy: 0.999850
+
+Per-epoch metrics
+Epoch 01: loss=0.246380 acc=0.915963
+Epoch 02: loss=0.044412 acc=0.989116
+Epoch 03: loss=0.027052 acc=0.994017
+Epoch 04: loss=0.022603 acc=0.995640
+Epoch 05: loss=0.014734 acc=0.996693
+Epoch 06: loss=0.013588 acc=0.996783
+Epoch 07: loss=0.012667 acc=0.997324
+Epoch 08: loss=0.009081 acc=0.998016
+Epoch 09: loss=0.007700 acc=0.998226
+Epoch 10: loss=0.007100 acc=0.998406
