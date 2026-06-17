@@ -112,11 +112,12 @@ Testo Raw
 ├─→ [Ramo 2: Feature Stilometriche]
 │   ├─ Analisi sintattica (spaCy)
 │   ├─ Estrazione di 42 feature
-│   └─ Output: [B, 42]
+│   ├─ Dense(256) + BatchNorm + Activation
+│   ├─ Dense(128) + BatchNorm + Activation
+│   └─ Output: [B, 128]
 │
 └─→ [Fusione e Classificazione]
-    ├─ Concatenazione: [B, 810]
-    ├─ Rete classificatore
+    ├─ Concatenazione: [B, 896]
     └─ Output: Probabilità (0-1)
 ```
 
@@ -198,24 +199,32 @@ Questi ultimi rappresentano la distribuzione normalizzata dei Part-Of-Speech tag
 #### 4. Architettura della Rete Neurale (Hybrid Model)
 
 ```
-SciBERT Embeddings [B, 768]  →  ┐
-                                  │
-Stylometric Features [B, 42]  →  Concatenate  →  [B, 810]
-                                  │
-                                  ↓
-                        Dense(512, relu)
-                              ↓
-                        BatchNorm
-                              ↓
-                        Dropout(0.25)
-                              ↓
-                        Dense(256, relu)
-                              ↓
-                        Dropout(0.25)
-                              ↓
-                        Dense(1, sigmoid)
-                              ↓
-                    Output: Probabilità AI (0-1)
+SciBERT Embeddings [B, 768]  ──────────────────┐
+                                                 │
+Stylometric Features [B, 42]  →  Dense(256)  →  │
+                                  BatchNorm      │
+                                  ReLU           │
+                                  Dropout(0.5)   │
+                                  Dense(128)  →  │
+                                  BatchNorm      │
+                                  ReLU           │
+                                  [B, 128]      │
+                                                 ↓
+                                         Concatenate  →  [B, 896]
+                                                 ↓
+                                         Dense(512, relu)
+                                                 ↓
+                                         BatchNorm
+                                                 ↓
+                                         Dropout(0.25)
+                                                 ↓
+                                         Dense(256, relu)
+                                                 ↓
+                                         Dropout(0.25)
+                                                 ↓
+                                         Dense(1, sigmoid)
+                                                 ↓
+                                    Output: Probabilità AI (0-1)
 ```
 
 **Componenti principali:**
@@ -228,14 +237,18 @@ Dense(256, relu)
     ↓
 BatchNorm
     ↓
-Dropout(0.5)
+ReLU + Dropout(0.5)
+    ↓
+Dense(128, relu)
+    ↓
+BatchNorm + ReLU
     ↓
 Output [B, 128]
 ```
 
 **Classifier:**
 ```
-Fused [B, 810]
+Fused [B, 896]
     ↓
 Dense(512, relu)
     ↓
