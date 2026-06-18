@@ -537,13 +537,14 @@ Sette varianti del modello sono state testate:
 │ 4. SHALLOW STYLO (Branca stilometrica semplificata)           │
 ├───────────────────────────────────────────────────────────────┤
 │ Final Accuracy:  0.999850        = Full Model                 │
-│ Final Loss:      0.000509        ≈ Full Model                 │
+│ Final Loss:      0.000509        ↑ +0.036% (aumentata)        │
 │ Epoch 1:  Loss=0.246, Acc=0.9160                              │
 │ Epoch 10: Loss=0.007, Acc=0.9984                              │
 │                                                               │
-│ Interpretazione: Stessi risultati della versione completa    │
-│ La semplificazione della branca stilometrica non degrada     │
-│ la performance. Il modello ha una struttura ottimale.        │
+│ Interpretazione: Accuracy uguale ma loss aumentata            │
+│ La semplificazione non degrada l'accuracy, ma aumenta         │
+│ leggermente la loss finale (0.000135 in più).                 │
+│ Trade-off positivo: meno parametri, accuracy conservata.      │
 └───────────────────────────────────────────────────────────────┘
 
 ┌───────────────────────────────────────────────────────────────┐
@@ -611,8 +612,8 @@ Sette varianti del modello sono state testate:
 ║ No Stylo                       ║ 0.999910 ↑     ║ 0.000429 ↑            ║
 ║   → Performance Gain: +0.006%  ║ (SciBERT!)     ║ +0.015%               ║
 ╠────────────────────────────────╬────────────────╬───────────────────────╣
-║ Shallow Stylo                  ║ 0.999850 =     ║ 0.000509 ≈            ║
-║   → Equivalente al Full        ║ Identico       ║ Comparabile           ║
+║ Shallow Stylo                  ║ 0.999850 =     ║ 0.000509 ↑            ║
+║   → Accuracy uguale, loss +    ║ Identico       ║ +0.036%               ║
 ╠────────────────────────────────╬────────────────╬───────────────────────╣
 ║ No Batch Norm                  ║ 0.999699 ≈     ║ 0.000998 ≈            ║
 ║   → Loss: -0.015% (minimo)     ║ (quasi uguale) ║ +0.167%               ║
